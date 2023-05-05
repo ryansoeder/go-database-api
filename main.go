@@ -1,9 +1,6 @@
 package main
 
 import (
-	// "fmt"
-	// "log"
-	// "errors"
 	"database/sql"
 	"log"
 	"net/http"
@@ -105,8 +102,6 @@ func getAlbum(g *gin.Context) {
 			g.IndentedJSON(http.StatusOK, []Album{})
 			return
 		}
-		// g.AbortWithStatus(500)
-		// return
 	}
 
 	// Send "album" as JSON
