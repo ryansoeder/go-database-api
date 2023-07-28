@@ -2,12 +2,14 @@ package main
 
 import (
 	"database/sql"
+	"fmt"
 	"log"
 	"net/http"
-	"os"
+
+	// "os"
 
 	"github.com/gin-gonic/gin"
-	"github.com/go-sql-driver/mysql"
+	_ "github.com/mattn/go-sqlite3"
 )
 
 var db *sql.DB
@@ -21,18 +23,18 @@ type Album struct {
 
 func init() {
 	// Capture connection properties
-	cfg := mysql.Config{
-		User: os.Getenv("DBUSER"),
-		Passwd: os.Getenv("DBPASS"),
-		Net: "tcp",
-		Addr: "127.0.0.1:3306",
-		DBName: "recordings",
-		AllowNativePasswords: true,
-	}
+	// cfg := mysql.Config{
+	// 	User: os.Getenv("MYSQL_USER"),
+	// 	Passwd: os.Getenv("MYSQL_PASSWORD"),
+	// 	Net: "tcp",
+	// 	Addr: ":3306",
+	// 	DBName: os.Getenv("MYSQL_DATABASE"),
+	// 	AllowNativePasswords: true,
+	// }
 
 	// Get a database handle
 	var err error
-	db, err = sql.Open("mysql", cfg.FormatDSN())
+	db, err = sql.Open("sqlite3", "./records.db")
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -42,6 +44,7 @@ func init() {
 	if pingErr != nil {
 		log.Fatal(pingErr)
 	}
+	fmt.Println("Connected")
 }
 
 func main() {
