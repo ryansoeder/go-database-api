@@ -64,9 +64,10 @@ func getAlbums(g *gin.Context) {
 	var albums[]Album
 
 	// Query the database
-	rows, err := db.Query("SELECT * FROM album")
+	rows, err := db.Query("SELECT * FROM albums")
 	if err != nil {
-		g.AbortWithStatus(500)
+		fmt.Printf("%v\n", err)
+		g.AbortWithStatus(503)
 		return
 	}
 
@@ -97,7 +98,7 @@ func getAlbum(g *gin.Context) {
 	var alb Album
 
 	// Query the database (DB.QueryRow dos not return an error)
-	row := db.QueryRow("SELECT * FROM album WHERE id = ?", id)
+	row := db.QueryRow("SELECT * FROM albums WHERE id = ?", id)
 
 	// Use Rows.Scan() to insert the values from the row into the "album" variable
 	if err := row.Scan(&alb.ID, &alb.Title, &alb.Artist, &alb.Price); err != nil {
