@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"os"
 
 	// "os"
 
@@ -31,9 +32,16 @@ func init() {
 	// 	DBName: os.Getenv("MYSQL_DATABASE"),
 	// 	AllowNativePasswords: true,
 	// }
+	var err error
+	
+	path, err := os.Getwd()
+	if err != nil {
+		log.Println(err)
+	}
+	fmt.Println(path)  // for example /home/user
 
 	// Get a database handle
-	var err error
+
 	db, err = sql.Open("sqlite3", "./records.db")
 	if err != nil {
 		log.Fatal(err)
@@ -67,7 +75,7 @@ func getAlbums(g *gin.Context) {
 	rows, err := db.Query("SELECT * FROM albums")
 	if err != nil {
 		fmt.Printf("%v\n", err)
-		g.AbortWithStatus(503)
+		g.AbortWithStatus(500)
 		return
 	}
 

@@ -1,5 +1,4 @@
 # syntax=docker/dockerfile:1
-
 FROM golang:1.19-alpine
 
 
@@ -24,7 +23,7 @@ RUN go mod download
 COPY *.go *.db ./
 
 # Build
-RUN go build -o /api-go .
+RUN go build -o /app/api-go
 
 # Optional:
 # To bind to a TCP port, runtime parameters must be supplied to the docker command.
@@ -34,4 +33,4 @@ RUN go build -o /api-go .
 EXPOSE 8080
 
 # Run
-CMD ["/api-go"]
+CMD ["/app/api-go"]

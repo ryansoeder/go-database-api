@@ -1,13 +1,12 @@
-DROP TABLE IF EXISTS album;
-CREATE TABLE album (
-  id         INT AUTO_INCREMENT NOT NULL,
-  title      VARCHAR(128) NOT NULL,
-  artist     VARCHAR(255) NOT NULL,
-  price      DECIMAL(5,2) NOT NULL,
-  PRIMARY KEY (`id`)
+DROP TABLE IF EXISTS albums;
+CREATE TABLE albums (
+  id         INTEGER PRIMARY KEY ASC,
+  title      TEXT,
+  artist     TEXT,
+  price      INTEGER
 );
 
-INSERT INTO album
+INSERT INTO albums
   (title, artist, price)
 VALUES
   ('Blue Train', 'John Coltrane', 56.99),
