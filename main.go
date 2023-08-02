@@ -95,7 +95,7 @@ func getAlbums(g *gin.Context) {
 	}
 
 	// Send "albums" as JSON
-	g.IndentedJSON(http.StatusOK, albums)
+	g.JSON(http.StatusOK, albums)
 }
 
 func getAlbum(g *gin.Context) {
@@ -112,11 +112,11 @@ func getAlbum(g *gin.Context) {
 	if err := row.Scan(&alb.ID, &alb.Title, &alb.Artist, &alb.Price); err != nil {
 		// If no rows are found, return an message
 		if err == sql.ErrNoRows {
-			g.IndentedJSON(http.StatusOK, []Album{})
+			g.JSON(http.StatusOK, []Album{})
 			return
 		}
 	}
 
 	// Send "album" as JSON
-	g.IndentedJSON(http.StatusOK, alb)
+	g.JSON(http.StatusOK, alb)
 }

@@ -1,7 +1,6 @@
 # syntax=docker/dockerfile:1
 FROM golang:1.19-alpine
 
-
 # Because this is a CGO enabled package, you are required to set it as 1.
 ENV CGO_ENABLED=1
 
