@@ -22,6 +22,12 @@ type Album struct {
 	Price float32 `json:"price"`
 }
 
+type Verse struct {
+	Topic string `json:"topic"`
+	Verse string `json:"verse"`
+	Supports bool `json:"supports"`
+}
+
 func init() {
 	// Capture connection properties
 	// cfg := mysql.Config{
@@ -42,7 +48,7 @@ func init() {
 
 	// Get a database handle
 
-	db, err = sql.Open("sqlite3", "./records.db")
+	db, err = sql.Open("sqlite3", "./verses.db")
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -62,6 +68,7 @@ func main() {
 	// Register routes
 	r.GET("/albums", getAlbums)
 	r.GET("/albums/:id", getAlbum)
+	r.GET("/topic/:topic_id", getTopic)
 
 	// Run the server
 	r.Run(":8080")
@@ -119,4 +126,36 @@ func getAlbum(g *gin.Context) {
 
 	// Send "album" as JSON
 	g.JSON(http.StatusOK, alb)
+}
+
+func getTopic(g *gin.Context) {
+	topicID := g.Param("topic_id")
+
+	var verses[]Verse
+
+	// Query the database
+	rows, err := db.Query("SELECT t.topic_name, bv.verse_text, bv.supports FROM topics t JOIN bible_verses bv ON t.topic_id = bv.topic_id WHERE t.topic_id = ?", topicID)
+	if err != nil {
+		fmt.Printf("%v\n", err)
+		g.AbortWithStatus(500)
+		return
+	}
+
+	// Loop through the returned rows and add each to the "verses" slice
+	for rows.Next() {
+		// Declare a variable of type Verse to hold the row
+		var verse Verse
+
+		// Use Rows.Scan() to insert values into "verse"
+		if err := rows.Scan(&verse.Topic, &verse.Verse, &verse.Supports); err != nil {
+			g.AbortWithStatus(500)
+			return
+		}
+
+		// Add the verse from the row to "verses"
+		verses = append(verses, verse)
+	}
+
+	// Send "albums" as JSON
+	g.JSON(http.StatusOK, verses)
 }
