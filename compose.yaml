@@ -1,37 +1,15 @@
 version: '1.0'
 
 services:
-  # db:
-  #   image: mysql:latest # use latest version of mysql
-  #   container_name: db # add a name for the container
-  #   command: --default-authentication-plugin=mysql_native_password
-  #   restart: unless-stopped
-  #   env_file:
-  #     - 'variables.env'
-  #   # environment: # add default values, see docs for more info.
-  #   #   MYSQL_USER: user
-  #   #   MYSQL_ROOT_PASSWORD: my_fun_password
-  #   #   MYSQL_PASSWORD: my_fun_password
-  #   #   MYSQL_DATABASE: testdb # create this database on startup
-  #   volumes:
-  #     - my-db:/var/lib/mysql
-  #   ports:
-  #     - ':3306'
-
-  go:
-    build: # Use the Dockerfile from the current directory to build container.
-      context: .
-    container_name: go
+  backend:
+    build:
+      context: ./backend/
+    container_name: backend
     ports:
       - ':8080'
-    depends_on:
-      - 'db'
-    # env_file:
-    #   - 'variables.env'
-    # environment: # add default values, see docs for more info.
-    #   MYSQL_USER: user
-    #   MYSQL_ROOT_PASSWORD: my_fun_password
-    #   MYSQL_PASSWORD: my_fun_password
-    #   MYSQL_DATABASE: testdb # create this database on startup
-# volumes: # add volume to persist data.
-#   my-db:
+  frontend:
+    build:
+      context: ./frontend/
+    container_name: frontend
+    ports:
+      - ':3000'
