@@ -1,16 +1,27 @@
 {
-  "name": "nuxt-app",
-  "private": true,
-  "scripts": {
-    "build": "nuxt build",
-    "dev": "nuxt dev",
-    "generate": "nuxt generate",
-    "preview": "nuxt preview",
-    "postinstall": "nuxt prepare"
-  },
-  "devDependencies": {
-    "@nuxt/devtools": "latest",
-    "@types/node": "^18.17.1",
-    "nuxt": "^3.6.5"
-  }
+	"name": "nuxt-app",
+	"private": true,
+	"scripts": {
+		"build": "nuxt build",
+		"dev": "nuxt dev --port=5678",
+		"generate": "nuxt generate",
+		"preview": "nuxt preview",
+		"postinstall": "nuxt prepare",
+		"lint:js": "eslint --ext \".ts,.vue\" --ignore-path .gitignore .",
+		"lint:prettier": "prettier --check .",
+		"lint": "npm run lint:js && npm run lint:prettier",
+		"lintfix": "prettier --write --list-different . && yarn lint:js --fix"
+	},
+	"devDependencies": {
+		"@nuxt/devtools": "latest",
+		"@nuxtjs/eslint-config-typescript": "^12.0.0",
+		"@types/node": "^18.17.1",
+		"@typescript-eslint/parser": "^5.62.0",
+		"eslint": "^8.46.0",
+		"eslint-config-prettier": "^9.0.0",
+		"eslint-plugin-prettier": "^5.0.0",
+		"nuxt": "^3.6.5",
+		"prettier": "^3.0.1",
+		"typescript": "^5.1.6"
+	}
 }

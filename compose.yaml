@@ -6,10 +6,10 @@ services:
       context: ./backend/
     container_name: backend
     ports:
-      - ':8080'
+      - '8080:8080'
   frontend:
     build:
       context: ./frontend/
     container_name: frontend
     ports:
-      - ':3000'
+      - '3000:3000'
