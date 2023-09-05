@@ -7,8 +7,6 @@ import (
 	"net/http"
 	"os"
 
-	// "os"
-
 	"github.com/gin-gonic/gin"
 	_ "github.com/mattn/go-sqlite3"
 )
@@ -23,7 +21,7 @@ type Album struct {
 }
 
 type Verse struct {
-	Topic string `json:"topic"`
+	Reference string `json:"reference"`
 	Verse string `json:"verse"`
 	Supports bool `json:"supports"`
 }
@@ -134,7 +132,18 @@ func getTopic(g *gin.Context) {
 	var verses[]Verse
 
 	// Query the database
-	rows, err := db.Query("SELECT t.topic_name, bv.verse_text, bv.supports FROM topics t JOIN bible_verses bv ON t.topic_id = bv.topic_id WHERE t.topic_id = ?", topicID)
+	rows, err := db.Query(`
+		SELECT
+			bible_verses.verse_reference,
+			bible_verses.verse_text,
+			map.supports
+		FROM
+			map
+		INNER JOIN
+			bible_verses ON map.verse_id = bible_verses.verse_id
+		WHERE
+			map.topic_id = ?;
+		`, topicID)
 	if err != nil {
 		fmt.Printf("%v\n", err)
 		g.AbortWithStatus(500)
@@ -147,7 +156,7 @@ func getTopic(g *gin.Context) {
 		var verse Verse
 
 		// Use Rows.Scan() to insert values into "verse"
-		if err := rows.Scan(&verse.Topic, &verse.Verse, &verse.Supports); err != nil {
+		if err := rows.Scan(&verse.Reference, &verse.Verse, &verse.Supports); err != nil {
 			g.AbortWithStatus(500)
 			return
 		}
