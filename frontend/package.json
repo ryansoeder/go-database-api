@@ -15,13 +15,26 @@
 	"devDependencies": {
 		"@nuxt/devtools": "latest",
 		"@nuxtjs/eslint-config-typescript": "^12.0.0",
+		"@nuxtjs/tailwindcss": "^6.8.0",
 		"@types/node": "^18.17.1",
 		"@typescript-eslint/parser": "^5.62.0",
 		"eslint": "^8.46.0",
 		"eslint-config-prettier": "^9.0.0",
 		"eslint-plugin-prettier": "^5.0.0",
 		"nuxt": "^3.6.5",
+		"nuxt-quasar-ui": "^2.0.5",
 		"prettier": "^3.0.1",
+		"sass": "^1.66.1",
+		"sass-loader": "^13.3.2",
 		"typescript": "^5.1.6"
+	},
+	"overrides": {
+		"vue": "latest"
+	},
+	"dependencies": {
+		"@pinia/nuxt": "^0.4.11",
+		"@quasar/extras": "^1.16.6",
+		"pinia": "^2.1.6",
+		"quasar": "^2.12.6"
 	}
 }

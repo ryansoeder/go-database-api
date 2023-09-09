@@ -20,6 +20,11 @@ type Album struct {
 	Price float32 `json:"price"`
 }
 
+type Topic struct {
+	ID string `json:"id"`
+	Topic string `json:"topic"`
+}
+
 type Verse struct {
 	Reference string `json:"reference"`
 	Verse string `json:"verse"`
@@ -63,9 +68,13 @@ func main() {
 	// Create a new router
 	r := gin.Default()
 
+	// allow CORS
+	r.Use(CORSMiddleware())
+
 	// Register routes
 	r.GET("/albums", getAlbums)
 	r.GET("/albums/:id", getAlbum)
+	r.GET("/topics", getTopics)
 	r.GET("/topic/:topic_id", getTopic)
 
 	// Run the server
@@ -126,6 +135,37 @@ func getAlbum(g *gin.Context) {
 	g.JSON(http.StatusOK, alb)
 }
 
+func getTopics(g *gin.Context) {
+	// Declare a slice called "topics" of type Album to hold the results
+	var topics[]Topic
+
+	// Query the database
+	rows, err := db.Query("SELECT * FROM topics")
+	if err != nil {
+		fmt.Printf("%v\n", err)
+		g.AbortWithStatus(500)
+		return
+	}
+
+	// Loop through the returned rows and add each to the "topics" slice
+	for rows.Next() {
+		// Declare a variable of type Topic to hold the row
+		var topic Topic
+
+		// Use Rows.Scan() to insert values into "alb"
+		if err := rows.Scan(&topic.ID, &topic.Topic); err != nil {
+			g.AbortWithStatus(500)
+			return
+		}
+
+		// Add the album from the row to "topics"
+		topics = append(topics, topic)
+	}
+
+	// Send "topics" as JSON
+	g.JSON(http.StatusOK, topics)
+}
+
 func getTopic(g *gin.Context) {
 	topicID := g.Param("topic_id")
 
@@ -167,4 +207,20 @@ func getTopic(g *gin.Context) {
 
 	// Send "albums" as JSON
 	g.JSON(http.StatusOK, verses)
+}
+
+func CORSMiddleware() gin.HandlerFunc {
+    return func(c *gin.Context) {
+        c.Writer.Header().Set("Access-Control-Allow-Origin", "*")
+        c.Writer.Header().Set("Access-Control-Allow-Credentials", "true")
+        c.Writer.Header().Set("Access-Control-Allow-Headers", "Content-Type, Content-Length, Accept-Encoding, X-CSRF-Token, Authorization, accept, origin, Cache-Control, X-Requested-With")
+        c.Writer.Header().Set("Access-Control-Allow-Methods", "POST, OPTIONS, GET, PUT")
+
+        if c.Request.Method == "OPTIONS" {
+            c.AbortWithStatus(204)
+            return
+        }
+
+        c.Next()
+    }
 }
